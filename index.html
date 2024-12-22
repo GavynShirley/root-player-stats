@@ -8,25 +8,25 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   </head>
   <body>
-    <div class="container">
+    <div class="container border">
         <!--Main Logo-->
-        <div class="row align-items-end">
-            <div class="col-3">
+        <div class="row">
+            <div class="col-4">
                 <img class="logo img-fluid" src="https://i.kickstarter.com/assets/020/450/960/e6a26b0f733b91c30c394359203649ce_original.png?anim=false&fit=scale-down&origin=ugc&q=92&width=700&sig=9Rjoqmos3xFs5GJepX4T6opIrRabJNcIU6F6tfrF1HI%3D" alt="Root Logo">
             </div>
-            <div class="col-auto">
-                <button id="showButton" class="btn btn-primary btn-sm mb-4" type="submit">Add New Game</button>
+            <div class="col-auto mt-auto">
+                <button id="showButton" class="btn btn-light btn-sm" type="submit">Add New Game</button>
             </div>
         </div>        
         <!--Add new game info-->
         <div class="row d-none" id="hiddenContent">
-            <div class="add-players col-2">
-                <label for="players">Players in game: </label>
+            <div class="add-players col">
+                <label for="players">Players: </label>
                 <select class="form-select form-select-sm" name="players">
                     <option value="new-player">Add new player +</option>
                 </select>
             </div>
-            <div class="add-maps col-2">
+            <div class="add-maps col">
                 <label for="maps">Map: </label>
                 <select class="form-select form-select-sm" name="maps">
                     <option value="autumn">Autumn</option>
@@ -35,7 +35,7 @@
                     <option value="mountain">Mountain</option>
                 </select>
             </div>
-            <div class="add-factions col-2">
+            <div class="add-factions col">
                 <label for="factions">Factions: </label>
                 <select class="form-select form-select-sm" name="factions">
                     <option value="marquise">Marquise de Cat</option>
@@ -50,7 +50,7 @@
                     <option value="hundreds">Lord of the Hundreds</option>
                 </select>
             </div>
-            <div class="add-hirelings col-2">
+            <div class="add-hirelings col">
                 <label for="hirelings">Hirelings: </label>
                 <select class="form-select form-select-sm" name="hirelings">
                     <option value="pro-patrol">Forest Patrol</option>
@@ -81,7 +81,7 @@
                     <option value="dem-band">Street Band</option>
                 </select>
             </div>
-            <div class="add-landmarks col-2">
+            <div class="add-landmarks col">
                 <label for="landmarks">Landmarks: </label>
                 <select class="form-select form-select-sm" name="landmarks">
                     <option value="ferry">The Ferry</option>
@@ -92,7 +92,7 @@
                     <option value="city">Lost City</option>
                 </select>
             </div>
-            <button class="submit-btn col-1 btn-sm rounded">Submit</button>
+            <button class="submit-btn col rounded">Submit</button>
         </div>
         <!--Top Players-->
         <div class="row">
