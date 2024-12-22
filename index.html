@@ -23,8 +23,13 @@
             <div class="add-players col">
                 <label for="players">Players: </label>
                 <select class="form-select form-select-sm" name="players">
-                    <option value="new-player">Add new player +</option>
+                    <!--Existing Players-->
                 </select>
+                <button id="addPlayerButton" class="btn btn-light btn-sm mt-2">Add New Player +</button>
+                <div id="newPlayerField" class="mt-2 d-none">
+                    <input type="text" id="newPlayerInput" class="form-control form-control-sm" placeholder="Enter player name">
+                    <button id="savePlayerButton" class="btn btn-primary btn-sm mt-2">Save</button>
+                </div>
             </div>
             <div class="add-maps col">
                 <label for="maps">Map: </label>
@@ -99,7 +104,7 @@
             <h1 class="text-center">Rulers of The Woodland</h1>
             <div class="col-4 text-center">
                 <h3>Name</h3>
-                <img>
+                <img class="col-2 img-fluid" src="images/ronin.png" alt="place-holder-meeple">
                 <div class="row">
                     <p class="col-6">Winrate</p>
                     <p class="col-6">Avg VP</p>
@@ -112,7 +117,7 @@
         <div class="col-5 text-center">
             <div class="row">
                 <p class="col-1">Name</p>
-                <img class="col-1">
+                <img class="col-2 img-fluid" src="images/ronin.png" alt="place-holder-meeple">
                 <p class="col-1">Winrate</p>
                 <p class="col-1">Avg VP</p>
             </div>
