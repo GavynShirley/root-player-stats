@@ -6,6 +6,8 @@ const removePlayerButton = document.getElementById("removePlayerButton");
 const playersSelect = document.getElementById("players-select");
 const showButton = document.getElementById("showButton");
 const hiddenContent = document.getElementById("hiddenContent");
+const topPlayersContainer = document.getElementById("topPlayers");
+const otherPlayersContainer = document.getElementById("otherPlayers");
 
 showButton.addEventListener("click", () => {
     hiddenContent.classList.toggle("d-none"); // Toggle visibility of the hidden content
@@ -85,3 +87,63 @@ removePlayerButton.addEventListener("click", () => {
         alert("Please select a player to remove.");
     }
 });
+
+// Function to calculate the most played faction for a player
+const getMostPlayedFaction = (playerData) => {
+    const factionCounts = playerData.timesPlayedWithFaction;
+    return Object.keys(factionCounts).reduce((a, b) =>
+        factionCounts[a] > factionCounts[b] ? a : b
+    );
+};
+
+// Function to render players in the specified container
+const renderPlayers = (container, players) => {
+    container.innerHTML = ""; // Clear existing players
+    players.forEach(player => {
+        const playerCard = document.createElement("div");
+        playerCard.classList.add("text-center", "m-2");
+        playerCard.innerHTML = `
+            <h3>${player.name}</h3>
+            <img class="img-fluid" src="images/${getMostPlayedFaction(player)}.png" alt="${getMostPlayedFaction(player)}">
+            <div class="row">
+                <p class="col-6">Winrate: ${player.winrateTotal}</p>
+                <p class="col-6">Avg VP: ${player.avgVP}</p>
+            </div>
+        `;
+        container.appendChild(playerCard);
+    });
+};
+
+// Function to update and render players in both sections
+const updatePlayerDisplay = () => {
+    // Convert playersData into an array for sorting
+    const playersArray = Object.values(playersData);
+
+    // Calculate winrate as a numeric value for sorting
+    playersArray.forEach(player => {
+        const winrate = parseFloat(player.winrateTotal.replace("%", "")) || 0;
+        player.winrate = winrate;
+    });
+
+    // Sort players by the specified criteria
+    playersArray.sort((a, b) => 
+        b.winrate - a.winrate ||
+        b.avgVP - a.avgVP ||
+        b.VPTotal - a.VPTotal ||
+        Object.values(b.timesPlayedWithFaction).reduce((x, y) => x + y, 0) -
+        Object.values(a.timesPlayedWithFaction).reduce((x, y) => x + y, 0) ||
+        a.name.localeCompare(b.name)
+    );
+
+    // Separate top 3 players and others
+    const topPlayers = playersArray.slice(0, 3);
+    const otherPlayers = playersArray.slice(3);
+
+    // Render players
+    renderPlayers(topPlayersContainer, topPlayers);
+    renderPlayers(otherPlayersContainer, otherPlayers);
+};
+
+// Call updatePlayerDisplay whenever playersData is updated
+savePlayerButton.addEventListener("click", updatePlayerDisplay);
+removePlayerButton.addEventListener("click", updatePlayerDisplay);
