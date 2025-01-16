@@ -37,15 +37,31 @@ addPlayerButton.addEventListener("click", () => {
     newPlayerInput.value = ""; // Clear any previous input
 });
 
-// Save the new player and add it to the dropdown
 savePlayerButton.addEventListener("click", () => {
     const newPlayerName = newPlayerInput.value.trim();
     if (newPlayerName) {
-        const newOption = document.createElement("option");
-        newOption.value = newPlayerName.toLowerCase().replace(/\s+/g, "-"); // Create a value-friendly option
-        newOption.textContent = newPlayerName; // Set the display name
-        playersSelect.appendChild(newOption); // Add the new option to the dropdown
-        
+        // Create a new checkbox
+        const checkboxContainer = document.createElement("div");
+        checkboxContainer.className = "form-check";
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "form-check-input";
+        checkbox.id = `player-${newPlayerName.toLowerCase().replace(/\s+/g, "-")}`;
+        checkbox.value = newPlayerName;
+
+        const label = document.createElement("label");
+        label.className = "form-check-label";
+        label.htmlFor = checkbox.id;
+        label.textContent = newPlayerName;
+
+        // Append the checkbox and label to the container
+        checkboxContainer.appendChild(checkbox);
+        checkboxContainer.appendChild(label);
+
+        // Add the container to the players-select div
+        playersSelect.appendChild(checkboxContainer);
+
         // Create a new player object with default values
         playersData[newPlayerName] = {
             name: newPlayerName,
@@ -68,7 +84,8 @@ savePlayerButton.addEventListener("click", () => {
 
         console.log(`Player "${newPlayerName}" created:`, playersData[newPlayerName]); // Debugging log
 
-        newPlayerField.classList.add("d-none"); // Hide the input field
+        // Hide the input field
+        newPlayerField.classList.add("d-none");
     } else {
         alert("Please enter a valid name."); // Optional: Basic validation
     }
