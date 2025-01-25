@@ -8,10 +8,112 @@ const showButton = document.getElementById("showButton");
 const hiddenContent = document.getElementById("hiddenContent");
 const topPlayersContainer = document.getElementById("topPlayers");
 const otherPlayersContainer = document.getElementById("otherPlayers");
+const submitButton = document.getElementById("submitButton");
+const playerFactionAssignments = document.getElementById("playerFactionAssignments");
+const winnerSelect = document.getElementById("winnerSelect");
+
 
 showButton.addEventListener("click", () => {
     hiddenContent.classList.toggle("d-none"); // Toggle visibility of the hidden content
 });
+
+
+// Update faction assignments and winner dropdown when players are selected
+const updateFactionAssignments = () => {
+    // Clear previous assignments
+    playerFactionAssignments.innerHTML = "";
+    winnerSelect.innerHTML = "<option value=''>Select Winner</option>"; // Reset winner dropdown
+
+    // Get selected players
+    const selectedPlayers = Array.from(
+        document.querySelectorAll("#players-select .form-check-input:checked")
+    ).map(checkbox => checkbox.value);
+
+    // Dynamically create faction assignments for each player
+    selectedPlayers.forEach(playerName => {
+        // Add to winner dropdown
+        const winnerOption = document.createElement("option");
+        winnerOption.value = playerName;
+        winnerOption.textContent = playerName;
+        winnerSelect.appendChild(winnerOption);
+
+        // Create a dropdown for assigning factions
+        const factionAssignmentRow = document.createElement("div");
+        factionAssignmentRow.className = "row my-2";
+
+        factionAssignmentRow.innerHTML = `
+            <div class="col-6">
+                <span>${playerName}</span>
+            </div>
+            <div class="col-6">
+                <select class="form-select form-select-sm player-faction-select" data-player="${playerName}">
+                    ${factions
+                        .map(faction => `<option value="${faction}">${faction}</option>`)
+                        .join("")}
+                </select>
+            </div>
+        `;
+
+        playerFactionAssignments.appendChild(factionAssignmentRow);
+    });
+};
+
+
+// Handle submit button click
+submitButton.addEventListener("click", (event) => {
+    event.preventDefault(); // Prevent default behavior
+
+    // Get selected players and their assigned factions
+    const playerFactions = Array.from(
+        document.querySelectorAll(".player-faction-select")
+    ).reduce((acc, select) => {
+        const playerName = select.dataset.player;
+        const selectedFaction = select.value;
+        acc[playerName] = selectedFaction;
+        return acc;
+    }, {});
+
+    // Get the winner
+    const winner = winnerSelect.value;
+    if (!winner) {
+        alert("Please select a winner.");
+        return;
+    }
+
+    // Update stats
+    Object.entries(playerFactions).forEach(([playerName, faction]) => {
+        if (!playersData[playerName]) {
+            console.warn(`Player "${playerName}" does not exist in playersData.`);
+            return;
+        }
+
+        const player = playersData[playerName];
+
+        // Update timesPlayedWithFaction for all players
+        player.timesPlayedWithFaction[faction] += 1;
+
+        // Update timesWonWithFaction for the winner only
+        if (playerName === winner) {
+            player.timesWonWithFaction[faction] += 1;
+            player.VPTotal += 1; // Increment total VP as an example
+            player.winrateTotal = calculateWinRate(player); // Recalculate win rate
+        }
+    });
+
+    console.log("Updated playersData:", playersData);
+    alert(`Game data submitted. Winner: ${winner}`);
+    updatePlayerDisplay(); // Update the UI
+});
+
+// Helper function to calculate win rate
+const calculateWinRate = (player) => {
+    const totalGames = Object.values(player.timesPlayedWithFaction).reduce((a, b) => a + b, 0);
+    const totalWins = Object.values(player.timesWonWithFaction).reduce((a, b) => a + b, 0);
+    return totalGames ? ((totalWins / totalGames) * 100).toFixed(2) + "%" : "0%";
+};
+
+// Update faction assignments when players are selected
+savePlayerButton.addEventListener("click", updateFactionAssignments);
 
 const playersData = {}; // Object to store all player data
 
